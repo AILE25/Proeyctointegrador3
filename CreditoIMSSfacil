@@ -1,0 +1,115 @@
+package com.example.myapplication.R 
+ 
+import android.os.Bundle 
+import android.widget.ArrayAdapter 
+import android.widget.Button 
+import android.widget.EditText 
+import android.widget.ListView 
+import androidx.appcompat.app.AppCompatActivity 
+import com.example.myapplication.R 
+ 
+class MainActivity : AppCompatActivity() { 
+    private lateinit var editTextData: EditText 
+    private lateinit var btnAdd: Button 
+    private lateinit var btnUpdate: Button 
+    private lateinit var btnDelete: Button 
+    private lateinit var listViewData: ListView 
+ 
+    private val dataList = ArrayList<String>() 
+    private lateinit var adapter: ArrayAdapter<String> 
+ 
+    override fun onCreate(savedInstanceState: Bundle?) { 
+        super.onCreate(savedInstanceState) 
+        setContentView(R.layout.activity_main) 
+ 
+        editTextData = findViewById(R.id.editTextData) 
+        btnAdd = findViewById(R.id.btnAdd) 
+        btnUpdate = findViewById(R.id.btnUpdate) 
+        btnDelete = findViewById(R.id.btnDelete) 
+        listViewData = findViewById(R.id.listViewData) 
+ 
+        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, dataList) 
+        listViewData.adapter = adapter 
+ 
+        btnAdd.setOnClickListener { 
+            dataList.add(editTextData.text.toString()) 
+            adapter.notifyDataSetChanged() 
+            editTextData.text.clear() 
+        } 
+ 
+        listViewData.setOnItemClickListener { _, _, position, _ -> 
+            editTextData.setText(dataList[position]) 
+        } 
+ 
+        btnUpdate.setOnClickListener { 
+            val selectedIndex = dataList.indexOf(editTextData.text.toString()) 
+            if (selectedIndex != -1) { 
+                dataList[selectedIndex] = editTextData.text.toString() 
+                adapter.notifyDataSetChanged() 
+            } 
+        } 
+ 
+        btnDelete.setOnClickListener { 
+            val itemToDelete = editTextData.text.toString() 
+            dataList.remove(itemToDelete) 
+            adapter.notifyDataSetChanged() 
+            editTextData.text.clear() 
+        } 
+    } 
+}
+
+<?xml version="1.0" encoding="utf-8"?> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent" 
+    android:orientation="vertical" 
+    android:padding="5dp"> 
+ 
+    <TextView 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:text="Crédito IMSS Fácil" 
+        android:textSize="24sp" 
+        android:textStyle="bold" 
+        android:layout_marginTop="20dp" 
+        android:layout_marginBottom="20dp"/> 
+ 
+    <EditText 
+        android:id="@+id/editTextData" 
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content" 
+        android:hint="Agregar" /> 
+ 
+    <LinearLayout 
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content" 
+        android:orientation="horizontal"> 
+ 
+        <Button 
+            android:id="@+id/btnAdd" 
+            android:layout_width="0dp" 
+            android:layout_height="wrap_content" 
+            android:layout_weight="1" 
+            android:text="Agregar"/> 
+ 
+        <Button 
+            android:id="@+id/btnUpdate" 
+            android:layout_width="0dp" 
+            android:layout_height="wrap_content" 
+            android:layout_weight="1" 
+            android:text="Actualizar"/> 
+ 
+        <Button 
+            android:id="@+id/btnDelete" 
+            android:layout_width="0dp" 
+            android:layout_height="wrap_content" 
+            android:layout_weight="1" 
+            android:text="Borrar"/> 
+    </LinearLayout> 
+ 
+    <ListView 
+        android:id="@+id/listViewData" 
+        android:layout_width="match_parent" 
+        android:layout_height="0dp" 
+        android:layout_weight="1"/> 
+</LinearLayout> 
